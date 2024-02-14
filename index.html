@@ -223,6 +223,10 @@ Attention, ce site n'a rien de réel, il sert uniquement de support/prototype à
       #formulaire-paiement {
         margin: 25px;
       }
+
+      #restant {
+        color: red;
+      }
     </style>
   </head>
   <body>
@@ -254,22 +258,22 @@ Attention, ce site n'a rien de réel, il sert uniquement de support/prototype à
           >Accueil</a
         >
         <a
-          href="#"
+          href="#haut-du-corps"
           onclick="showPage('haut-du-corps')"
           >Haut du corps</a
         >
         <a
-          href="#"
+          href="#bas-du-corps"
           onclick="showPage('bas-du-corps')"
           >Bas du corps</a
         >
         <a
-          href="#"
+          href="#sneakers"
           onclick="showPage('sneakers')"
           >Sneakers</a
         >
         <a
-          href="#"
+          href="#panier"
           onclick="toggleCart(); toggleCart(); showPage('panier');"
           >Panier</a
         >
@@ -319,6 +323,7 @@ Attention, ce site n'a rien de réel, il sert uniquement de support/prototype à
               alt="(Haut du corps 1)"
             />
             <h3>Haut du corps 1</h3>
+            <p id="restant">2 restants (6 intéressées)</p>
             <p>75 € <del>150 €</del></p>
             <button
               class="btn btn-ajouter"
@@ -336,6 +341,7 @@ Attention, ce site n'a rien de réel, il sert uniquement de support/prototype à
               alt="(Haut du corps 2)"
             />
             <h3>Haut du corps 2</h3>
+            <p id="restant">5 restants (10 intéressées)</p>
             <p>90 € <del>135 €</del></p>
             <button
               class="btn btn-ajouter"
@@ -361,6 +367,7 @@ Attention, ce site n'a rien de réel, il sert uniquement de support/prototype à
               alt="(Bas du corps 1)"
             />
             <h3>Bas du corps 1</h3>
+            <p id="restant">6 restants (12 intéressées)</p>
             <p>30 € <del>120 €</del></p>
             <button
               class="btn btn-ajouter"
@@ -378,6 +385,7 @@ Attention, ce site n'a rien de réel, il sert uniquement de support/prototype à
               alt="(Bas du corps 2)"
             />
             <h3>Bas du corps 2</h3>
+            <p id="restant">4 restants (12 intéressées)</p>
             <p>50 € <del>150 €</del></p>
             <button
               class="btn btn-ajouter"
@@ -403,6 +411,7 @@ Attention, ce site n'a rien de réel, il sert uniquement de support/prototype à
               alt="(Sneakers 1)"
             />
             <h3>Sneakers 1</h3>
+            <p id="restant">9 restants (16 intéressées)</p>
             <p>325 € <del>825 €</del></p>
             <button
               class="btn btn-ajouter"
@@ -420,6 +429,7 @@ Attention, ce site n'a rien de réel, il sert uniquement de support/prototype à
               alt="(Sneakers 2)"
             />
             <h3>Sneakers 2</h3>
+            <p id="restant">5 restants (15 intéressées)</p>
             <p>525 € <del>1125 €</del></p>
             <button
               class="btn btn-ajouter"
@@ -685,10 +695,16 @@ Attention, ce site n'a rien de réel, il sert uniquement de support/prototype à
         updateCart();
       }
 
+      function removeFromCart(index, itemPrice) {
+        cartItems.splice(index, 1);
+        totalAPayer -= itemPrice;
+        updateCart();
+      }
+
       function updateCart() {
         const cartContainer = document.getElementById('cart-items');
         cartContainer.innerHTML = '';
-        cartItems.forEach((item) => {
+        cartItems.forEach((item, index) => {
           const cartItemElement = document.createElement('div');
           cartItemElement.classList.add('cart-item');
           cartItemElement.innerHTML = `
@@ -698,6 +714,12 @@ Attention, ce site n'a rien de réel, il sert uniquement de support/prototype à
                 <div class="cart-item-details">
                     <span>${item.name}</span>
                     <span>— ${item.price}€</span>
+                    <button
+              class="btn btn-container-cart"
+              onclick="removeFromCart(${index}, ${item.price});"
+            >
+              Enlever
+            </button>
                 </div>
             `;
           cartContainer.appendChild(cartItemElement);
