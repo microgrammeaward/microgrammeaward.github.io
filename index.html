@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <!--Metadonnées-->
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Dark Clothes</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 0;
+        text-align: center;
+      }
+
+      nav {
+        background-color: #444;
+        color: #fff;
+        text-align: center;
+        padding: 10px 0;
+      }
+
+      nav a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 10px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 0 20px;
+      }
+
+      .product {
+        float: left;
+        width: calc(33.33% - 20px);
+        margin: 0 10px 20px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        box-sizing: border-box;
+        text-align: center;
+      }
+
+      .product img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      footer {
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        padding: 0;
+        margin: 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        height: 50px;
+        font-size: 9.375px;
+      }
+
+      .cart {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-top: 20px;
+        border-radius: 18.75px;
+      }
+
+      .cart h2 {
+        margin-top: 0;
+      }
+
+      .cart-item {
+        margin-bottom: 10px;
+      }
+
+      .cart-item img {
+        max-width: 50px;
+        height: auto;
+        vertical-align: middle;
+      }
+
+      .cart-item-details {
+        display: inline-block;
+        margin-left: 10px;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .countdown {
+        text-align: center;
+        font-size: 24px;
+        color: red;
+        margin-bottom: 20px;
+      }
+
+      .page-content {
+        display: none;
+      }
+
+      .active {
+        display: block;
+      }
+
+      .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+      }
+
+      .popup {
+        background-color: white;
+        padding: 25px;
+        border-radius: 25px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        text-align: center;
+      }
+
+      .btn {
+        padding: 12.5px 25px;
+        margin: 12.5px;
+        margin-left: 50px;
+        margin-right: 50px;
+        border: none;
+        border-radius: 12.5px;
+        cursor: pointer;
+      }
+
+      .btn.btn-reject {
+        color: white;
+        width: 150px;
+      }
+
+      .btn.btn-ajouter {
+        background-color: green;
+        color: white;
+      }
+
+      .btn.btn-accept {
+        background-color: green;
+        color: white;
+        width: 150px;
+      }
+
+      .btn-container-cart {
+        color: white;
+        width: 150px;
+      }
+
+      .img-shop {
+        border-radius: 25px;
+      }
+
+      .img-cart {
+        border-radius: 12.5px;
+      }
+
+      .btn.btn-payer {
+        background-color: green;
+        color: white;
+        width: 875px;
+        height: 62.5px;
+        text-align: center;
+        margin: 0 auto;
+        display: block;
+        font-size: 18.75px;
+      }
+
+      .btn.btn-carte-membre-oui {
+        background-color: green;
+        color: white;
+        text-align: center;
+        margin: 0 auto;
+        display: block;
+        width: 250px;
+        margin-bottom: 12.5px;
+        padding: 12.5px;
+      }
+
+      .btn.btn-carte-membre-non {
+        color: white;
+        text-align: center;
+        margin: 0 auto;
+        display: block;
+        width: 250px;
+        margin-bottom: 12.5px;
+        padding: 12.5px;
+      }
+
+      input[type='text'],
+      input[type='email'] {
+        width: 100%;
+        padding: 12.5px;
+        margin-bottom: 12.5px;
+        box-sizing: border-box;
+        border-radius: 12.5px;
+        height: 37.5px;
+      }
+
+      #formulaire-paiement {
+        margin: 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <!--Cookie-->
+    <div class="popup-overlay">
+      <div class="popup">
+        <h2>Accepter les cookies</h2>
+        <p>
+          Nous utilisons des cookies pour améliorer votre expérience
+          utilisateur.
+        </p>
+        <button class="btn btn-reject">Ne pas continuer</button>
+        <button class="btn btn-accept">Continuer</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <!--Barre de titre-->
+      <header>
+        <h1>Dark Clothes</h1>
+        <p>Sapes et sneakers streetwear pour homme</p>
+      </header>
+
+      <!--Barre d'en-tête-->
+      <nav>
+        <a
+          href="#"
+          onclick="showPage('accueil')"
+          >Accueil</a
+        >
+        <a
+          href="#"
+          onclick="showPage('haut-du-corps')"
+          >Haut du corps</a
+        >
+        <a
+          href="#"
+          onclick="showPage('bas-du-corps')"
+          >Bas du corps</a
+        >
+        <a
+          href="#"
+          onclick="showPage('sneakers')"
+          >Sneakers</a
+        >
+        <a
+          href="#"
+          onclick="toggleCart(); toggleCart(); showPage('panier');"
+          >Panier</a
+        >
+      </nav>
+
+      <p></p>
+
+      <!--Chronomètre-->
+      <div
+        class="countdown"
+        id="countdown"
+      >
+        Fin des promotions dans 60:00 — 75 %
+      </div>
+
+      <!--Contenu de la page-->
+      <div class="container">
+        <!--Page d'accueil-->
+        <div
+          id="accueil"
+          class="page-content active"
+        >
+          <h2>Accueil</h2>
+          <p>
+            Dark Clothes est une plateforme de vente de vêtements et de sneakers
+            streetwear pour homme.
+          </p>
+          <img
+            class="img-accueil"
+            src="Accueil.jpg"
+            alt="(Accueil)"
+          />
+        </div>
+
+        <!--Page pour les vêtements du haut du corps-->
+        <div
+          id="haut-du-corps"
+          class="page-content"
+        >
+          <h2>Haut du corps</h2>
+
+          <!--Produit 1-->
+          <div class="product">
+            <img
+              class="img-shop"
+              src="Haut du corps 1.jpg"
+              alt="(Haut du corps 1)"
+            />
+            <h3>Haut du corps 1</h3>
+            <p>75 € <del>150 €</del></p>
+            <button
+              class="btn btn-ajouter"
+              onclick="addToCart('Haut du corps 1', 75)"
+            >
+              Ajouter
+            </button>
+          </div>
+
+          <!--Produit 2-->
+          <div class="product">
+            <img
+              class="img-shop"
+              src="Haut du corps 2.jpg"
+              alt="(Haut du corps 2)"
+            />
+            <h3>Haut du corps 2</h3>
+            <p>90 € <del>135 €</del></p>
+            <button
+              class="btn btn-ajouter"
+              onclick="addToCart('Haut du corps 2', 90)"
+            >
+              Ajouter
+            </button>
+          </div>
+        </div>
+
+        <!--Page pour les vêtements du bas du corps-->
+        <div
+          id="bas-du-corps"
+          class="page-content"
+        >
+          <h2>Bas du corps</h2>
+
+          <!--Produit 1-->
+          <div class="product">
+            <img
+              class="img-shop"
+              src="Bas du corps 1.jpg"
+              alt="(Bas du corps 1)"
+            />
+            <h3>Bas du corps 1</h3>
+            <p>30 € <del>120 €</del></p>
+            <button
+              class="btn btn-ajouter"
+              onclick="addToCart('Bas du corps 1', 30)"
+            >
+              Ajouter
+            </button>
+          </div>
+
+          <!--Produit 2-->
+          <div class="product">
+            <img
+              class="img-shop"
+              src="Bas du corps 2.jpg"
+              alt="(Bas du corps 2)"
+            />
+            <h3>Bas du corps 2</h3>
+            <p>50 € <del>150 €</del></p>
+            <button
+              class="btn btn-ajouter"
+              onclick="addToCart('Bas du corps 2', 50)"
+            >
+              Ajouter
+            </button>
+          </div>
+        </div>
+
+        <!--Page pour les sneakers-->
+        <div
+          id="sneakers"
+          class="page-content"
+        >
+          <h2>Sneakers</h2>
+
+          <!--Produit 1-->
+          <div class="product">
+            <img
+              class="img-shop"
+              src="Sneakers 1.jpg"
+              alt="(Sneakers 1)"
+            />
+            <h3>Sneakers 1</h3>
+            <p>325 € <del>825 €</del></p>
+            <button
+              class="btn btn-ajouter"
+              onclick="addToCart('Sneakers 1', 325)"
+            >
+              Ajouter
+            </button>
+          </div>
+
+          <!--Produit 2-->
+          <div class="product">
+            <img
+              class="img-shop"
+              src="Sneakers 2.jpg"
+              alt="(Sneakers 2)"
+            />
+            <h3>Sneakers 2</h3>
+            <p>525 € <del>1125 €</del></p>
+            <button
+              class="btn btn-ajouter"
+              onclick="addToCart('Sneakers 2', 525)"
+            >
+              Ajouter
+            </button>
+          </div>
+        </div>
+
+        <!--Page pour le panier-->
+        <div
+          id="panier"
+          class="page-content"
+        >
+          <!--Panier-->
+          <h2>Panier</h2>
+          <button
+            class="btn btn-payer"
+            onclick="if (cartItems.length != 0) {showPage('carte-membre')}"
+          >
+            Payer
+          </button>
+          <div class="container cart">
+            <button
+              id="button-container-cart"
+              class="btn btn-container-cart"
+              onclick="toggleCart()"
+            >
+              Afficher le panier
+            </button>
+            <p id="total-a-payer-1">Total : 0 €</p>
+            <div
+              id="cart-items"
+              class="hidden"
+            ></div>
+          </div>
+        </div>
+
+        <!--Page pour la carte membre-->
+        <div
+          id="carte-membre"
+          class="page-content"
+        >
+          <!--Panier-->
+          <h2>Carte membre</h2>
+          <p>
+            Avec l'abonnement à la carte membre vous pouvez profiter de la
+            livraison en un jour gratuitement.
+          </p>
+          <button
+            class="btn btn-carte-membre-oui"
+            onclick="
+              showPage('paiement');
+              document.getElementById('livraison-carte-membre').checked = true;
+              document.getElementById('livraison-rapide').checked = false;
+              document.getElementById('livraison-standard').checked = false;
+              bonusLivraison = 20;
+              montant = totalAPayer + bonusLivraison;
+              document.getElementById('total-a-payer-2').innerText = '— Total : ' + montant + ' € —';
+            "
+          >
+            Continuer
+          </button>
+          <button
+            class="btn btn-carte-membre-non"
+            onclick="
+              showPage('paiement');
+              document.getElementById('livraison-carte-membre').checked = false;
+              document.getElementById('livraison-rapide').checked = true;
+              document.getElementById('livraison-standard').checked = false;
+              bonusLivraison = 10;
+              montant = totalAPayer + bonusLivraison;
+              document.getElementById('total-a-payer-2').innerText = '— Total : ' + montant + ' € —';
+            "
+          >
+            Continuer sans carte
+          </button>
+        </div>
+
+        <!--Page pour le paiement-->
+        <div
+          id="paiement"
+          class="page-content"
+        >
+          <!--Panier-->
+          <h2>Paiement</h2>
+          <div id="formulaire-paiement">
+            <label for="n-carte-bancaire">Numéro de carte bancaire :</label>
+            <input
+              type="text"
+              id="n-carte-bancaire"
+              name="n-carte-bancaire"
+              placeholder="1234 5678 9101 1121"
+              required
+            />
+            <label for="date-fin">Date d'expiration :</label>
+            <input
+              type="text"
+              id="date-fin"
+              name="date-fin"
+              placeholder="02/24"
+              required
+            />
+            <label for="cvc">Code de sécurité :</label>
+            <input
+              type="text"
+              id="cvc"
+              name="cvc"
+              placeholder="123"
+              required
+            />
+            <label for="email">Adresse e-mail :</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="nom.prenom@exemple.fr"
+              required
+            />
+            <label for="telephone">Numéro de téléphone :</label>
+            <input
+              type="text"
+              id="telephone"
+              name="telephone"
+              placeholder="+331 23 45 67 89"
+              required
+            />
+            <label for="address">Adresse de livraison :</label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              placeholder="10 rue de Sannois, 95000 Cergy, France"
+              required
+            />
+            <label>Méthode de livraison :</label>
+            <br />
+            <input
+              type="radio"
+              id="livraison-carte-membre"
+              name="livraison"
+              value="carte-membre"
+              onclick="
+                bonusLivraison = 20;
+                montant = totalAPayer + bonusLivraison;
+                document.getElementById('total-a-payer-2').innerText = '— Total : ' + montant + ' € —';
+              "
+            />
+            <label for="livraison-carte-membre"
+              >Livraison avec la carte membre</label
+            ><br />
+            <input
+              type="radio"
+              id="livraison-rapide"
+              name="livraison"
+              value="rapide"
+              onclick="
+                bonusLivraison = 10;
+                montant = totalAPayer + bonusLivraison;
+                document.getElementById('total-a-payer-2').innerText = '— Total : ' + montant + ' € —';
+              "
+            />
+            <label for="livraison-rapide">Livraison rapide</label><br />
+            <input
+              type="radio"
+              id="livraison-standard"
+              name="livraison"
+              value="standard"
+              onclick="
+                bonusLivraison = 0;
+                montant = totalAPayer + bonusLivraison;
+                document.getElementById('total-a-payer-2').innerText = '— Total : ' + montant + ' € —';
+              "
+            />
+            <label for="livraison-standard">Livraison standard</label><br />
+            <button
+              class="btn btn-payer"
+              onclick="showPage('fin')"
+            >
+              Payer
+            </button>
+            <p id="total-a-payer-2">— Total : 0 € —</p>
+          </div>
+        </div>
+
+        <!--Page pour la fin-->
+        <div
+          id="fin"
+          class="page-content"
+        >
+          <!--Payé-->
+          <h2>Payé</h2>
+          <p>
+            Votre commande sera envoyée à votre adresse très prochainement.
+            Veillez sur vos mails pour des informations supplémentaires.
+          </p>
+        </div>
+      </div>
+
+      <!--Bas de page-->
+      <footer>
+        <!--Copyright de la page web-->
+        <p>&copy; 2024 Dark Clothes</p>
+
+        <!--Coordonnées de l'entreprise-->
+        <p>10 rue de Sannois, 95000 Cergy</p>
+      </footer>
+    </div>
+
+    <!--Code source JavaScript de la page web-->
+    <script>
+      let cartItems = [];
+      let isCartHidden = true;
+      let totalAPayer = 0;
+      let bonusLivraison = 0;
+      let montant = 0;
+
+      function startCountdown(duration, display) {
+        let timer = duration,
+          minutes,
+          seconds;
+        setInterval(function () {
+          minutes = parseInt(timer / 60, 10);
+          seconds = parseInt(timer % 60, 10);
+          minutes = minutes < 10 ? '0' + minutes : minutes;
+          seconds = seconds < 10 ? '0' + seconds : seconds;
+          display.textContent =
+            'Fin des promotions dans ' + minutes + ':' + seconds + ' — 75 %';
+          if (--timer < 0) {
+            timer = duration;
+          }
+        }, 1000);
+      }
+
+      window.onload = function () {
+        let oneHour = 60 * 60,
+          display = document.getElementById('countdown');
+        startCountdown(oneHour, display);
+
+        document.getElementById('n-carte-bancaire').value = '';
+        document.getElementById('date-fin').value = '';
+        document.getElementById('cvc').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('telephone').value = '';
+        document.getElementById('address').value = '';
+      };
+
+      function showPage(pageId) {
+        let pages = document.querySelectorAll('.page-content');
+        pages.forEach((page) => {
+          page.classList.remove('active');
+        });
+        let pageToShow = document.getElementById(pageId);
+        if (pageToShow) {
+          pageToShow.classList.add('active');
+        }
+      }
+
+      function addToCart(itemName, itemPrice) {
+        cartItems.push({ name: itemName, price: itemPrice });
+        totalAPayer += itemPrice;
+        updateCart();
+      }
+
+      function updateCart() {
+        const cartContainer = document.getElementById('cart-items');
+        cartContainer.innerHTML = '';
+        cartItems.forEach((item) => {
+          const cartItemElement = document.createElement('div');
+          cartItemElement.classList.add('cart-item');
+          cartItemElement.innerHTML = `
+                <img class="img-cart" src="${getImageUrl(item.name)}" alt="(${
+            item.name
+          })">
+                <div class="cart-item-details">
+                    <span>${item.name}</span>
+                    <span>— ${item.price}€</span>
+                </div>
+            `;
+          cartContainer.appendChild(cartItemElement);
+        });
+        montant = totalAPayer + bonusLivraison;
+        document.getElementById('total-a-payer-1').innerText =
+          'Total : ' + montant + ' €';
+        document.getElementById('total-a-payer-2').innerText =
+          '— Total : ' + montant + ' € —';
+      }
+
+      function toggleCart() {
+        const cartContainer = document.getElementById('cart-items');
+        cartContainer.classList.toggle('hidden');
+        if (isCartHidden) {
+          document.getElementById('button-container-cart').innerText =
+            'Cacher le panier';
+          isCartHidden = false;
+        } else {
+          document.getElementById('button-container-cart').innerText =
+            'Afficher le panier';
+          isCartHidden = true;
+        }
+      }
+
+      function getImageUrl(itemName) {
+        return itemName + '.jpg';
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const popupOverlay = document.querySelector('.popup-overlay');
+        const acceptBtn = document.querySelector('.btn-accept');
+        const rejectBtn = document.querySelector('.btn-reject');
+        const content = document.querySelector('.content');
+        document.body.classList.add('popup-open');
+        popupOverlay.style.display = 'flex';
+        acceptBtn.addEventListener('click', function () {
+          popupOverlay.style.display = 'none';
+          document.body.classList.remove('popup-open');
+        });
+        rejectBtn.addEventListener('click', function () {
+          popupOverlay.style.display = 'none';
+          document.body.classList.remove('popup-open');
+        });
+      });
+    </script>
+  </body>
+</html>
